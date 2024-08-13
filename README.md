@@ -1,5 +1,7 @@
 # FLEXATOR
 
+[Live Demo](https://jbreuil.github.io/flexator/)
+
 Emulator of flex behavior for quick layout prototyping.
 
 Made with :
