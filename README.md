@@ -1,6 +1,16 @@
-# Nuxt 3 Minimal Starter
+# FLEXATOR
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Emulator of flex behavior for quick layout prototyping.
+
+Made with :
+
+- [Vue 3](https://v3.vuejs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Nuxt 3](https://nuxtjs.org/)
+- [Unocss](https://unocss.io/)
+- [Primevue](https://www.primefaces.org/primevue/)
+- [Aldrich Font](https://fonts.google.com/specimen/Aldrich)
+- [Bruno Ace Font](https://fonts.google.com/specimen/Bruno+Ace)
 
 ## Setup
 
