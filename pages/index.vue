@@ -4,7 +4,7 @@
 
 <template>
   <Block
-    class="h-90vh w-100% flex"
+    class="flex !h-90vh !w-100%"
     :depth="0"
     name="Page"
   />
