@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ml-5 h-5vh w-fit from-green via-blue to-pink from-10% to-90% bg-gradient-to-r bg-clip-text text-40px text-transparent font-title">
+    <div class="h-5vh w-fit from-green via-blue to-pink from-10% to-90% bg-gradient-to-r bg-clip-text text-40px text-transparent font-title">
       FLEXATOR
     </div>
     <slot />

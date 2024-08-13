@@ -29,7 +29,7 @@ for (const key in unoColors) {
 
 export default defineConfig({
   rules: [
-    // ['custom-rule', { color: 'red' }],
+    ['text-muted', { color: 'var(--p-text-muted-color)' }],
   ],
   shortcuts: {
     // 'custom-shortcut': 'text-lg text-orange hover:text-teal',
