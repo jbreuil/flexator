@@ -2,7 +2,13 @@
   <div>
     <NuxtRouteAnnouncer />
     <NuxtLayout>
-     <NuxtPage />
+      <NuxtPage />
     </NuxtLayout>
   </div>
 </template>
+
+<style lang="css">
+html {
+  font-family: 'Aldrich';
+}
+</style>

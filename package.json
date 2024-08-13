@@ -1,23 +1,31 @@
 {
   "name": "nuxt-app",
-  "private": true,
   "type": "module",
+  "private": true,
+  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@primevue/themes": "^4.0.4",
     "nuxt": "^3.12.4",
+    "primevue": "^4.0.4",
     "vue": "latest"
   },
-  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
   "devDependencies": {
     "@antfu/eslint-config": "^2.25.0",
-    "eslint": "9.5.0",
+    "@iconify/json": "^2.2.235",
+    "@primevue/nuxt-module": "^4.0.4",
     "@unocss/eslint-plugin": "^0.61.9",
-    "eslint-plugin-format": "^0.1.2"
+    "@unocss/nuxt": "^0.61.9",
+    "eslint": "9.5.0",
+    "eslint-plugin-format": "^0.1.2",
+    "unocss": "^0.61.9"
   }
 }
