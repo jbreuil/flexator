@@ -9,7 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: actions/setup-node@main
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
       - run: pnpm install
       - run: pnpm run build --preset github_pages
       - name: Init new repo in dist folder and commit generated files
