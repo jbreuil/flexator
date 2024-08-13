@@ -13,6 +13,7 @@ const emit = defineEmits<{
 const count = ref(0)
 const blockList = ref<Array<{ name: string }>>([])
 const editVisible = ref(false)
+const editExtendedOptions = ref(false)
 function add() {
   count.value++
   blockList.value.push({ name: `Block ${count.value}` })
@@ -20,6 +21,7 @@ function add() {
 
 function edit() {
   editVisible.value = true
+  editExtendedOptions.value = false
 }
 
 function remove(name: string) {
@@ -114,9 +116,13 @@ const wrapOptions = ref([
   { value: 'wrap-reverse', icon: 'i-ph-arrow-elbow-up-left' },
 ])
 
+type FlexOrder = number
+const order = ref<FlexOrder>(0)
+
 const style = reactive({
   flexDirection: computed(() => direction.value),
   flexWrap: computed(() => wrap.value),
+  order: computed(() => order.value),
 })
 </script>
 
@@ -128,7 +134,6 @@ const style = reactive({
     aria-haspopup="true"
     @contextmenu="onBlockRightClick"
   >
-    <!-- <span v-if="blockList.length === 0">{{ props.name }}</span> -->
     <div
       v-if="blockList.length === 0"
       class="text-muted h-full w-full flex items-center justify-center text-center"
@@ -155,7 +160,7 @@ const style = reactive({
       :style="{ width: '50vw' }"
     >
       <div class="mb-4 flex items-center gap-4">
-        <label for="direction" class="w-24 font-semibold">Direction</label>
+        <label for="direction" class="w-24">Direction</label>
         <SelectButton
           id="direction"
           v-model="direction"
@@ -170,7 +175,7 @@ const style = reactive({
         </SelectButton>
       </div>
       <div class="mb-4 flex items-center gap-4">
-        <label for="wrap" class="w-24 font-semibold">Wrap</label>
+        <label for="wrap" class="w-24">Wrap</label>
         <SelectButton
           id="wrap"
           v-model="wrap"
@@ -184,10 +189,31 @@ const style = reactive({
           </template>
         </SelectButton>
       </div>
+      <div
+        v-if="!editExtendedOptions"
+        class="text-muted text-right font-size-3 underline hover:cursor-pointer"
+        @click="editExtendedOptions = true"
+      >
+        Click here to show more
+      </div>
+      <div v-else>
+        <div class="mb-4 flex items-center gap-4">
+          <label for="order" class="w-24">Order</label>
+          <InputNumber
+            id="order"
+            v-model="order"
+          />
+        </div>
+        <div
+          class="text-muted text-right font-size-3 underline hover:cursor-pointer"
+          @click="editExtendedOptions = false"
+        >
+          Show less
+        </div>
+      </div>
     </Dialog>
   </div>
 </template>
 
 <style scoped>
-
 </style>

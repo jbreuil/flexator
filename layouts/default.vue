@@ -5,7 +5,7 @@
     </div>
     <slot />
     <div class="align-center mt-2 flex justify-center">
-      BREUIL Julien - 2024
+      BREUIL Julien
       <a href="https://github.com/jbreuil"><span class="i-ph-github-logo ml-2 text-white" /></a>
     </div>
   </div>
