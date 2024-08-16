@@ -149,12 +149,58 @@ const alignItemsOptions = ref([
   { value: 'baseline', icon: 'i-material-symbols-format-color-text' },
 ])
 
+type FlexAlignContent = 'normal' | 'stretch' | 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
+const alignContent = ref<FlexAlignContent>('normal')
+const alignContentOptions = ref([
+  { value: 'normal', icon: 'i-material-symbols-border-all' },
+  { value: 'stretch', icon: 'i-material-symbols-align-items-stretch' },
+  { value: 'flex-start', icon: 'i-material-symbols-align-start' },
+  { value: 'flex-end', icon: 'i-material-symbols-align-end' },
+  { value: 'center', icon: 'i-material-symbols-align-center' },
+  { value: 'space-between', icon: 'i-material-symbols-align-justify-space-between' },
+  { value: 'space-around', icon: 'i-material-symbols-align-justify-space-around' },
+  { value: 'space-evenly', icon: 'i-material-symbols-align-justify-space-even' },
+])
+
+type FlexRowGapUnit = 'px' | 'rem' | 'em' | 'vh' | 'vw' | '%'
+const rowGapUnit = ref<FlexRowGapUnit>('px')
+const rowGap = ref(0)
+
+type FlexColumnGapUnit = 'px' | 'rem' | 'em' | 'vh' | 'vw' | '%'
+const columnGapUnit = ref<FlexColumnGapUnit>('px')
+const columnGap = ref(0)
+
+const grow = ref(0)
+const shrink = ref(1)
+
+type FlexBasisUnit = 'px' | '%' | 'vw' | 'rem' | 'em' | 'auto'
+const basisUnit = ref<FlexBasisUnit>('auto')
+const basis = ref(0)
+
+type FlexAlignSelf = 'auto' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch'
+const alignSelf = ref<FlexAlignSelf>('auto')
+const alignSelfOptions = ref([
+  { value: 'auto', icon: 'i-material-symbols-square-outline-rounded' },
+  { value: 'flex-start', icon: 'i-material-symbols-align-start' },
+  { value: 'flex-end', icon: 'i-material-symbols-align-end' },
+  { value: 'center', icon: 'i-material-symbols-align-center' },
+  { value: 'baseline', icon: 'i-material-symbols-format-color-text' },
+  { value: 'stretch', icon: 'i-material-symbols-align-items-stretch' },
+])
+
 const style = reactive({
   flexDirection: computed(() => direction.value),
   flexWrap: computed(() => wrap.value),
   order: computed(() => order.value),
   justifyContent: computed(() => justifyContent.value),
   alignItems: computed(() => alignItems.value),
+  alignContent: computed(() => alignContent.value),
+  rowGap: computed(() => `${rowGap.value}${rowGapUnit.value}`),
+  columnGap: computed(() => `${columnGap.value}${columnGapUnit.value}`),
+  grow: computed(() => grow.value),
+  shrink: computed(() => shrink.value),
+  alignSelf: computed(() => alignSelf.value),
+  basis: computed(() => basisUnit.value === 'auto' ? 'auto' : `${basis.value}${basisUnit.value}`),
   width: computed(() => widthUnit.value === 'auto' ? 'auto' : `${width.value}${widthUnit.value}`),
   height: computed(() => heightUnit.value === 'auto' ? 'auto' : `${height.value}${heightUnit.value}`),
 })
@@ -191,10 +237,10 @@ const style = reactive({
       v-model:visible="editVisible"
       modal
       header="Edit block"
-      :style="{ width: '50vw' }"
+      :style="{ width: '70vw' }"
     >
       <div class="mb-4 flex items-center gap-4">
-        <label id="direction" class="w-24">Direction</label>
+        <label id="direction" class="w-24 text-emerald">Direction</label>
         <SelectButton
           v-model="direction"
           aria-labelledby="direction"
@@ -209,7 +255,7 @@ const style = reactive({
         </SelectButton>
       </div>
       <div class="mb-4 flex items-center gap-4">
-        <label id="wrap" class="w-24">Wrap</label>
+        <label id="wrap" class="w-24 text-emerald">Wrap</label>
         <SelectButton
           v-model="wrap"
           aria-labelledby="wrap"
@@ -224,7 +270,7 @@ const style = reactive({
         </SelectButton>
       </div>
       <div class="mb-4 flex items-center gap-4">
-        <label id="justifyContent" class="w-24">Justify content</label>
+        <label id="justifyContent" class="w-24 text-emerald">Justify content</label>
         <SelectButton
           v-model="justifyContent"
           aria-labelledby="justifyContent"
@@ -239,7 +285,7 @@ const style = reactive({
         </SelectButton>
       </div>
       <div class="mb-4 flex items-center gap-4">
-        <label id="alignItems" class="w-24">Align items</label>
+        <label id="alignItems" class="w-24 text-emerald">Align items</label>
         <SelectButton
           id="alignItems"
           v-model="alignItems"
@@ -261,6 +307,7 @@ const style = reactive({
             v-if="widthUnit !== 'auto'"
             v-model="width"
             input-id="width"
+            show-buttons
           />
           <Select
             id="widthUnit"
@@ -275,6 +322,7 @@ const style = reactive({
             v-if="heightUnit !== 'auto'"
             v-model="height"
             input-id="height"
+            show-buttons
           />
           <Select
             id="heightUnit"
@@ -282,27 +330,134 @@ const style = reactive({
             :options="['px', '%', 'vh', 'rem', 'em', 'auto']"
           />
         </div>
+
         <div class="mb-4 flex items-center gap-4">
-          <label for="order" class="w-24">Order</label>
+          <label for="grow" class="w-24 text-pink">Grow</label>
+          <InputNumber
+            v-model="grow"
+            input-id="grow"
+            show-buttons
+          />
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="shrink" class="w-24 text-pink">Shrink</label>
+          <InputNumber
+            v-model="shrink"
+            input-id="shrink"
+            show-buttons
+          />
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="basis" class="w-24 text-pink">Basis</label>
+          <InputNumber
+            v-if="basisUnit !== 'auto'"
+            v-model="basis"
+            input-id="basis"
+            show-buttons
+          />
+          <Select
+            id="basisUnit"
+            v-model="basisUnit"
+            :options="['px', '%', 'vw', 'rem', 'em', 'auto']"
+          />
+        </div>
+        <div class="mb-4 flex items-center gap-4">
+          <label for="alignContent" class="w-24 text-emerald">Align content</label>
+          <SelectButton
+            v-model="alignContent"
+            aria-labelledby="alignContent"
+            option-label="value"
+            option-value="value"
+            data-key="value"
+            :options="alignContentOptions"
+          >
+            <template #option="slotProps">
+              <i v-tooltip.bottom="slotProps.option.value" :class="slotProps.option.icon" />
+            </template>
+          </SelectButton>
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="rowGap" class="w-24 text-emerald">Row gap</label>
+          <InputNumber
+            v-model="rowGap"
+            input-id="rowGap"
+            show-buttons
+          />
+          <Select
+            id="rowGapUnit"
+            v-model="rowGapUnit"
+            :options="['px', 'rem', 'em', 'vh', 'vw', '%']"
+          />
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="columnGap" class="w-24 text-emerald">Column gap</label>
+          <InputNumber
+            v-model="columnGap"
+            input-id="columnGap"
+            show-buttons
+          />
+          <Select
+            id="columnGapUnit"
+            v-model="columnGapUnit"
+            :options="['px', 'rem', 'em', 'vh', 'vw', '%']"
+          />
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="alignSelf" class="w-24 text-pink">Align self</label>
+          <SelectButton
+            v-model="alignSelf"
+            aria-labelledby="alignSelf"
+            option-label="value"
+            option-value="value"
+            data-key="value"
+            :options="alignSelfOptions"
+          >
+            <template #option="slotProps">
+              <i v-tooltip.bottom="slotProps.option.value" :class="slotProps.option.icon" />
+            </template>
+          </SelectButton>
+        </div>
+
+        <div class="mb-4 flex items-center gap-4">
+          <label for="order" class="w-24 text-pink">Order</label>
           <InputNumber
             v-model="order"
             input-id="order"
+            show-buttons
           />
         </div>
-        <div
-          class="text-muted text-right font-size-3 underline hover:cursor-pointer"
-          @click="editExtendedOptions = false"
-        >
-          Show less
+      </div>
+      <template #footer>
+        <div class="w-full flex font-size-3">
+          <div class="mr-auto flex gap-10">
+            <div class="text-emerald font-italic">
+              Container properties
+            </div>
+            <div class="text-pink font-italic">
+              Item properties
+            </div>
+          </div>
+          <div
+            v-if="!editExtendedOptions"
+            class="text-muted text-right underline hover:cursor-pointer"
+            @click="editExtendedOptions = true"
+          >
+            Click here to show more
+          </div>
+          <div
+            v-else
+            class="text-muted text-right underline hover:cursor-pointer"
+            @click="editExtendedOptions = false"
+          >
+            Show less
+          </div>
         </div>
-      </div>
-      <div
-        v-else
-        class="text-muted text-right font-size-3 underline hover:cursor-pointer"
-        @click="editExtendedOptions = true"
-      >
-        Click here to show more
-      </div>
+      </template>
     </Dialog>
   </div>
 </template>
