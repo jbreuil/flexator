@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Textarea from 'primevue/textarea'
+
 const props = defineProps<{
   name: string
   depth: number
@@ -12,6 +14,7 @@ const emit = defineEmits<{
 
 const count = ref(0)
 const blockList = ref<Array<{ name: string }>>([])
+const content = ref('')
 const editVisible = ref(false)
 const editExtendedOptions = ref(false)
 function add() {
@@ -215,10 +218,13 @@ const style = reactive({
     @contextmenu="onBlockRightClick"
   >
     <div
-      v-if="blockList.length === 0"
+      v-if="blockList.length === 0 && content === ''"
       class="text-muted h-full w-full flex items-center justify-center text-center"
     >
       <i class="i-ph-mouse-right-click-fill" /> to interact
+    </div>
+    <div v-else>
+      {{ content }}
     </div>
     <Block
       v-for="block in blockList"
@@ -429,6 +435,13 @@ const style = reactive({
             v-model="order"
             input-id="order"
             show-buttons
+          />
+        </div>
+        <div class="mb-4 flex items-center gap-4">
+          <label for="content" class="w-24 text-pink">Content</label>
+          <Textarea
+            v-model="content"
+            input-id="content"
           />
         </div>
       </div>
