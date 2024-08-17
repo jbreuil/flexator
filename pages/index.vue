@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useStorage } from '@vueuse/core'
-import type { Block } from '#build/components'
 import { Block as BlockClass } from '~/objects/Block'
 
 const { empty, adminPanel } = usePreset()
@@ -9,12 +8,7 @@ const save = useStorage<BlockClass>('flexator', empty(), undefined, {
   serializer: {
     write: (v: any) => JSON.stringify(v),
     read: (v: any) => v
-      ? JSON.parse(v, (key, value) => {
-        if (key === '') {
-          return Object.assign(new BlockClass(0), value)
-        }
-        return value
-      })
+      ? JSON.parse(v, BlockClass.reviver)
       : null,
   },
 })
@@ -25,7 +19,6 @@ watchDeep(() => root.value, (newValue) => {
     save.value = newValue
 })
 
-const _export = ref<InstanceType<typeof Block> | null>(null)
 const { copy, isSupported } = useClipboard()
 const toast = useToast()
 
@@ -48,9 +41,7 @@ const items = [
     label: 'HTML to clipboard',
     icon: 'i-material-symbols-file-copy',
     command: async () => {
-      if (!_export.value)
-        return
-      const html = _export.value.$el.innerHTML
+      const html = root.value.getHTML()
       await copy(html)
       toast.add({
         severity: 'success',
@@ -75,7 +66,6 @@ const items = [
         </template>
       </Menubar>
       <Block
-        ref="_export"
         v-model="root"
         class="flex !h-90vh !w-100%"
       />
