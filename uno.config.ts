@@ -57,4 +57,14 @@ export default defineConfig({
   theme: {
     colors: unoColors,
   },
+  content: {
+    pipeline: {
+      include: [
+        // the default
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        // include js/ts files
+        '**/*.{js,ts}',
+      ],
+    },
+  },
 })

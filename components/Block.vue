@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import Textarea from 'primevue/textarea'
-
-const props = defineProps<{
-  name: string
-  depth: number
-}>()
+import type { Block } from '~/objects/Block'
 
 const emit = defineEmits<{
   (e: 'add'): void
@@ -12,76 +7,10 @@ const emit = defineEmits<{
   (e: 'remove'): void
 }>()
 
-const count = ref(0)
-const blockList = ref<Array<{ name: string }>>([])
-const content = ref('')
-const editVisible = ref(false)
-const editExtendedOptions = ref(false)
-function add() {
-  count.value++
-  blockList.value.push({ name: `Block ${count.value}` })
-}
-
-function edit() {
-  editVisible.value = true
-  editExtendedOptions.value = false
-}
-
-function remove(name: string) {
-  blockList.value = blockList.value.filter(block => block.name !== name)
-}
-
-const menu = ref()
-function onBlockRightClick(event: MouseEvent) {
-  menu.value.show(event)
-}
-const items = ref([
-  {
-    label: 'Create block',
-    icon: 'i-ph-plus-square',
-    command: () => {
-      add()
-    },
-  },
-  {
-    label: 'Edit',
-    icon: 'i-ph-note-pencil',
-    command: () => {
-      edit()
-    },
-  },
-  {
-    label: 'Remove',
-    icon: 'i-ph-trash',
-    command: () => {
-      emit('remove')
-    },
-    visible: () => props.depth > 0,
-  },
-  {
-    visible: () => props.depth > 0,
-    separator: true,
-  },
-  {
-    label: 'Create block in parent',
-    icon: 'i-ph-plus-square',
-    command: () => {
-      emit('add')
-    },
-    visible: () => props.depth > 0,
-  },
-  {
-    label: 'Edit parent',
-    icon: 'i-ph-note-pencil',
-    command: () => {
-      emit('edit')
-    },
-    visible: () => props.depth > 0,
-  },
-])
+const block = defineModel<Block>({ required: true })
 
 const dephtColor = computed(() => {
-  switch (props.depth) {
+  switch (block.value.depth) {
     case 0:
       return 'b-white'
     case 1:
@@ -101,112 +30,92 @@ const dephtColor = computed(() => {
   }
 })
 
-// flex attributes
-
-type WidthUnit = 'px' | '%' | 'vw' | 'rem' | 'em' | 'auto'
-const widthUnit = ref<WidthUnit>('auto')
-const width = ref(100)
-
-type HeightUnit = 'px' | '%' | 'vh' | 'rem' | 'em' | 'auto'
-const heightUnit = ref<HeightUnit>('auto')
-const height = ref(100)
-
-type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse'
-const direction = ref<FlexDirection>('row')
-const directionOptions = ref([
-  { value: 'row', icon: 'i-ph-arrow-right' },
-  { value: 'row-reverse', icon: 'i-ph-arrow-left' },
-  { value: 'column', icon: 'i-ph-arrow-down' },
-  { value: 'column-reverse', icon: 'i-ph-arrow-up' },
-])
-
-type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse'
-const wrap = ref<FlexWrap>('nowrap')
-const wrapOptions = ref([
-  { value: 'nowrap', icon: 'i-ph-arrow-line-right' },
-  { value: 'wrap', icon: 'i-ph-arrow-elbow-down-left' },
-  { value: 'wrap-reverse', icon: 'i-ph-arrow-elbow-up-left' },
-])
-
-type FlexOrder = number
-const order = ref<FlexOrder>(0)
-
-type FlexJustifyContent = 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
-const justifyContent = ref<FlexJustifyContent>('flex-start')
-const justifyContentOptions = ref([
-  { value: 'flex-start', icon: 'i-material-symbols-align-justify-flex-start' },
-  { value: 'flex-end', icon: 'i-material-symbols-align-justify-flex-end' },
-  { value: 'center', icon: 'i-material-symbols-align-justify-center' },
-  { value: 'space-between', icon: 'i-material-symbols-align-justify-space-between' },
-  { value: 'space-around', icon: 'i-material-symbols-align-justify-space-around' },
-  { value: 'space-evenly', icon: 'i-material-symbols-align-justify-space-even' },
-])
-
-type FlexAlignItems = 'stretch' | 'flex-start' | 'flex-end' | 'center' | 'baseline'
-const alignItems = ref<FlexAlignItems>('stretch')
-const alignItemsOptions = ref([
-  { value: 'stretch', icon: 'i-material-symbols-align-items-stretch' },
-  { value: 'flex-start', icon: 'i-material-symbols-align-start' },
-  { value: 'flex-end', icon: 'i-material-symbols-align-end' },
-  { value: 'center', icon: 'i-material-symbols-align-center' },
-  { value: 'baseline', icon: 'i-material-symbols-format-color-text' },
-])
-
-type FlexAlignContent = 'normal' | 'stretch' | 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
-const alignContent = ref<FlexAlignContent>('normal')
-const alignContentOptions = ref([
-  { value: 'normal', icon: 'i-material-symbols-border-all' },
-  { value: 'stretch', icon: 'i-material-symbols-align-items-stretch' },
-  { value: 'flex-start', icon: 'i-material-symbols-align-start' },
-  { value: 'flex-end', icon: 'i-material-symbols-align-end' },
-  { value: 'center', icon: 'i-material-symbols-align-center' },
-  { value: 'space-between', icon: 'i-material-symbols-align-justify-space-between' },
-  { value: 'space-around', icon: 'i-material-symbols-align-justify-space-around' },
-  { value: 'space-evenly', icon: 'i-material-symbols-align-justify-space-even' },
-])
-
-type FlexRowGapUnit = 'px' | 'rem' | 'em' | 'vh' | 'vw' | '%'
-const rowGapUnit = ref<FlexRowGapUnit>('px')
-const rowGap = ref(0)
-
-type FlexColumnGapUnit = 'px' | 'rem' | 'em' | 'vh' | 'vw' | '%'
-const columnGapUnit = ref<FlexColumnGapUnit>('px')
-const columnGap = ref(0)
-
-const grow = ref(0)
-const shrink = ref(1)
-
-type FlexBasisUnit = 'px' | '%' | 'vw' | 'rem' | 'em' | 'auto'
-const basisUnit = ref<FlexBasisUnit>('auto')
-const basis = ref(0)
-
-type FlexAlignSelf = 'auto' | 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch'
-const alignSelf = ref<FlexAlignSelf>('auto')
-const alignSelfOptions = ref([
-  { value: 'auto', icon: 'i-material-symbols-square-outline-rounded' },
-  { value: 'flex-start', icon: 'i-material-symbols-align-start' },
-  { value: 'flex-end', icon: 'i-material-symbols-align-end' },
-  { value: 'center', icon: 'i-material-symbols-align-center' },
-  { value: 'baseline', icon: 'i-material-symbols-format-color-text' },
-  { value: 'stretch', icon: 'i-material-symbols-align-items-stretch' },
-])
-
 const style = reactive({
-  flexDirection: computed(() => direction.value),
-  flexWrap: computed(() => wrap.value),
-  order: computed(() => order.value),
-  justifyContent: computed(() => justifyContent.value),
-  alignItems: computed(() => alignItems.value),
-  alignContent: computed(() => alignContent.value),
-  rowGap: computed(() => `${rowGap.value}${rowGapUnit.value}`),
-  columnGap: computed(() => `${columnGap.value}${columnGapUnit.value}`),
-  grow: computed(() => grow.value),
-  shrink: computed(() => shrink.value),
-  alignSelf: computed(() => alignSelf.value),
-  basis: computed(() => basisUnit.value === 'auto' ? 'auto' : `${basis.value}${basisUnit.value}`),
-  width: computed(() => widthUnit.value === 'auto' ? 'auto' : `${width.value}${widthUnit.value}`),
-  height: computed(() => heightUnit.value === 'auto' ? 'auto' : `${height.value}${heightUnit.value}`),
+  flexDirection: computed(() => block.value.flexDirection),
+  flexWrap: computed(() => block.value.flexWrap),
+  order: computed(() => block.value.order),
+  justifyContent: computed(() => block.value.justifyContent),
+  alignItems: computed(() => block.value.alignItems),
+  alignContent: computed(() => block.value.alignContent),
+  rowGap: computed(() => `${block.value.rowGap}${block.value.rowGapUnit}`),
+  columnGap: computed(() => `${block.value.columnGap}${block.value.columnGapUnit}`),
+  flexGrow: computed(() => block.value.flexGrow),
+  flexShrink: computed(() => block.value.flexShrink),
+  alignSelf: computed(() => block.value.alignSelf),
+  flexBasis: computed(() => block.value.flexBasisUnit === 'auto' ? 'auto' : `${block.value.flexBasis}${block.value.flexBasisUnit}`),
+  width: computed(() => block.value.widthUnit === 'auto' ? 'auto' : `${block.value.width}${block.value.widthUnit}`),
+  height: computed(() => block.value.heightUnit === 'auto' ? 'auto' : `${block.value.height}${block.value.heightUnit}`),
 })
+
+// context menu
+const menu = ref()
+const editVisible = ref(false)
+const editExtendedOptions = ref(false)
+const { directionOptions, wrapOptions, justifyContentOptions, alignItemsOptions, alignContentOptions, alignSelfOptions } = useOptions()
+
+function onBlockRightClick(event: MouseEvent) {
+  menu.value.show(event)
+}
+
+function add() {
+  block.value.addChild()
+}
+
+function edit() {
+  editVisible.value = true
+  editExtendedOptions.value = false
+}
+
+function remove(id: number) {
+  block.value.removeChild(id)
+}
+
+const items = [
+  {
+    label: 'Create block',
+    icon: 'i-ph-plus-square',
+    command: () => {
+      block.value.addChild()
+    },
+  },
+  {
+    label: 'Edit',
+    icon: 'i-ph-note-pencil',
+    command: () => {
+      edit()
+    },
+  },
+  {
+    label: 'Remove',
+    icon: 'i-ph-trash',
+    command: () => {
+      emit('remove')
+    },
+    visible: () => block.value.depth > 0,
+  },
+  {
+    visible: () => block.value.depth > 0,
+    separator: true,
+  },
+  {
+    label: 'Create block in parent',
+    icon: 'i-ph-plus-square',
+    command: () => {
+      emit('add')
+    },
+    visible: () => block.value.depth > 0,
+  },
+  {
+    label: 'Edit parent',
+    icon: 'i-ph-note-pencil',
+    command: () => {
+      emit('edit')
+    },
+    visible: () => block.value.depth > 0,
+  },
+]
+
+const content = ref('')
 </script>
 
 <template>
@@ -218,7 +127,7 @@ const style = reactive({
     @contextmenu="onBlockRightClick"
   >
     <div
-      v-if="blockList.length === 0 && content === ''"
+      v-if="block.children.length === 0 && content === ''"
       class="text-muted h-full w-full flex items-center justify-center text-center"
     >
       <i class="i-ph-mouse-right-click-fill" /> to interact
@@ -227,13 +136,12 @@ const style = reactive({
       {{ content }}
     </div>
     <Block
-      v-for="block in blockList"
-      :key="block.name"
-      :name="block.name"
-      :depth="props.depth + 1"
+      v-for="(child, index) in block.children"
+      :key="child.id"
+      v-model="block.children[index]"
       @add="add"
       @edit="edit"
-      @remove="remove(block.name)"
+      @remove="remove(child.id)"
     />
     <ContextMenu
       ref="menu"
@@ -248,7 +156,7 @@ const style = reactive({
       <div class="mb-4 flex items-center gap-4">
         <label id="direction" class="w-24 text-emerald">Direction</label>
         <SelectButton
-          v-model="direction"
+          v-model="block.flexDirection"
           aria-labelledby="direction"
           option-label="value"
           option-value="value"
@@ -263,7 +171,7 @@ const style = reactive({
       <div class="mb-4 flex items-center gap-4">
         <label id="wrap" class="w-24 text-emerald">Wrap</label>
         <SelectButton
-          v-model="wrap"
+          v-model="block.flexWrap"
           aria-labelledby="wrap"
           option-label="value"
           option-value="value"
@@ -278,7 +186,7 @@ const style = reactive({
       <div class="mb-4 flex items-center gap-4">
         <label id="justifyContent" class="w-24 text-emerald">Justify content</label>
         <SelectButton
-          v-model="justifyContent"
+          v-model="block.justifyContent"
           aria-labelledby="justifyContent"
           option-label="value"
           option-value="value"
@@ -294,7 +202,7 @@ const style = reactive({
         <label id="alignItems" class="w-24 text-emerald">Align items</label>
         <SelectButton
           id="alignItems"
-          v-model="alignItems"
+          v-model="block.alignItems"
           option-label="value"
           option-value="value"
           data-key="value"
@@ -307,32 +215,32 @@ const style = reactive({
         </SelectButton>
       </div>
       <div v-if="editExtendedOptions">
-        <div v-if="props.depth > 0" class="mb-4 flex items-center gap-4">
+        <div v-if="block.depth > 0" class="mb-4 flex items-center gap-4">
           <label for="width" class="w-24">Width</label>
           <InputNumber
-            v-if="widthUnit !== 'auto'"
-            v-model="width"
+            v-if="block.widthUnit !== 'auto'"
+            v-model="block.width"
             input-id="width"
             show-buttons
           />
           <Select
             id="widthUnit"
-            v-model="widthUnit"
+            v-model="block.widthUnit"
 
             :options="['px', '%', 'vw', 'rem', 'em', 'auto']"
           />
         </div>
-        <div v-if="props.depth > 0" class="mb-4 flex items-center gap-4">
+        <div v-if="block.depth > 0" class="mb-4 flex items-center gap-4">
           <label for="height" class="w-24">Height</label>
           <InputNumber
-            v-if="heightUnit !== 'auto'"
-            v-model="height"
+            v-if="block.heightUnit !== 'auto'"
+            v-model="block.height"
             input-id="height"
             show-buttons
           />
           <Select
             id="heightUnit"
-            v-model="heightUnit"
+            v-model="block.heightUnit"
             :options="['px', '%', 'vh', 'rem', 'em', 'auto']"
           />
         </div>
@@ -340,7 +248,7 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="grow" class="w-24 text-pink">Grow</label>
           <InputNumber
-            v-model="grow"
+            v-model="block.flexGrow"
             input-id="grow"
             show-buttons
           />
@@ -349,7 +257,7 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="shrink" class="w-24 text-pink">Shrink</label>
           <InputNumber
-            v-model="shrink"
+            v-model="block.flexShrink"
             input-id="shrink"
             show-buttons
           />
@@ -358,21 +266,21 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="basis" class="w-24 text-pink">Basis</label>
           <InputNumber
-            v-if="basisUnit !== 'auto'"
-            v-model="basis"
+            v-if="block.flexBasisUnit !== 'auto'"
+            v-model="block.flexBasis"
             input-id="basis"
             show-buttons
           />
           <Select
             id="basisUnit"
-            v-model="basisUnit"
+            v-model="block.flexBasisUnit"
             :options="['px', '%', 'vw', 'rem', 'em', 'auto']"
           />
         </div>
         <div class="mb-4 flex items-center gap-4">
           <label for="alignContent" class="w-24 text-emerald">Align content</label>
           <SelectButton
-            v-model="alignContent"
+            v-model="block.alignContent"
             aria-labelledby="alignContent"
             option-label="value"
             option-value="value"
@@ -388,13 +296,13 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="rowGap" class="w-24 text-emerald">Row gap</label>
           <InputNumber
-            v-model="rowGap"
+            v-model="block.rowGap"
             input-id="rowGap"
             show-buttons
           />
           <Select
             id="rowGapUnit"
-            v-model="rowGapUnit"
+            v-model="block.rowGapUnit"
             :options="['px', 'rem', 'em', 'vh', 'vw', '%']"
           />
         </div>
@@ -402,13 +310,13 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="columnGap" class="w-24 text-emerald">Column gap</label>
           <InputNumber
-            v-model="columnGap"
+            v-model="block.columnGap"
             input-id="columnGap"
             show-buttons
           />
           <Select
             id="columnGapUnit"
-            v-model="columnGapUnit"
+            v-model="block.columnGapUnit"
             :options="['px', 'rem', 'em', 'vh', 'vw', '%']"
           />
         </div>
@@ -416,7 +324,7 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="alignSelf" class="w-24 text-pink">Align self</label>
           <SelectButton
-            v-model="alignSelf"
+            v-model="block.alignSelf"
             aria-labelledby="alignSelf"
             option-label="value"
             option-value="value"
@@ -432,7 +340,7 @@ const style = reactive({
         <div class="mb-4 flex items-center gap-4">
           <label for="order" class="w-24 text-pink">Order</label>
           <InputNumber
-            v-model="order"
+            v-model="block.order"
             input-id="order"
             show-buttons
           />
@@ -476,4 +384,5 @@ const style = reactive({
 </template>
 
 <style scoped>
+
 </style>
