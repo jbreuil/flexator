@@ -1,9 +1,14 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
   <div>
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <Toast position="bottom-center" />
   </div>
 </template>
 
