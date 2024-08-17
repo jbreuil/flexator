@@ -1,15 +1,25 @@
 <script setup lang="ts">
 import { useStorage } from '@vueuse/core'
+import { Block as BlockClass } from '~/objects/Block'
 
-const { empty, test } = usePreset()
+const { empty, adminPanel } = usePreset()
 
-const save = useStorage('flexator', { block: empty() })
-const root = reactive({ block: empty() })
+const save = useStorage<BlockClass>('flexator', empty(), undefined, {
+  serializer: {
+    write: (v: any) => JSON.stringify(v),
+    read: (v: any) => v
+      ? JSON.parse(v, (key, value) => {
+        if (key === '') {
+          return Object.assign(new BlockClass(0), value)
+        }
+        return value
+      })
+      : null,
+  },
+})
+const root = ref<BlockClass>(save.value)
 
-if (save.value.block !== empty())
-  root.block = save.value.block
-
-watchDeep(() => root, (newValue) => {
+watchDeep(() => root.value, (newValue) => {
   if (newValue !== null && newValue !== undefined)
     save.value = newValue
 })
@@ -21,11 +31,11 @@ const items = [
     items: [
       {
         label: 'Empty',
-        command: () => root.block = empty(),
+        command: () => root.value = empty(),
       },
       {
         label: 'Admin panel',
-        command: () => root.block = test(),
+        command: () => root.value = adminPanel(),
       },
     ],
   },
@@ -43,7 +53,7 @@ const items = [
     </Menubar>
     <ClientOnly>
       <Block
-        v-model="root.block"
+        v-model="root"
         class="flex !h-90vh !w-100%"
       />
     </ClientOnly>

@@ -5,7 +5,7 @@ export function usePreset() {
     return new Block(0)
   }
 
-  function test() {
+  function adminPanel() {
     const parent = new Block(0)
     parent.addChild()
     return parent
@@ -13,6 +13,6 @@ export function usePreset() {
 
   return {
     empty,
-    test,
+    adminPanel,
   }
 }
