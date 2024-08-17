@@ -111,4 +111,10 @@ export class Block {
     // For all other levels, return the value as is
     return value
   }
+
+  public static resetRoot() {
+    const root = new Block(0)
+    root.name = 'Root'
+    return root
+  }
 }

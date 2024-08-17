@@ -2,9 +2,7 @@
 import { useStorage } from '@vueuse/core'
 import { Block as BlockClass } from '~/objects/Block'
 
-const { empty, adminPanel } = usePreset()
-
-const save = useStorage<BlockClass>('flexator', empty(), undefined, {
+const save = useStorage<BlockClass>('flexator', BlockClass.resetRoot(), undefined, {
   serializer: {
     write: (v: any) => JSON.stringify(v),
     read: (v: any) => v
@@ -24,18 +22,9 @@ const toast = useToast()
 
 const items = [
   {
-    label: 'Presets',
-    icon: 'i-material-symbols-auto-awesome-mosaic',
-    items: [
-      {
-        label: 'Empty',
-        command: () => root.value = empty(),
-      },
-      {
-        label: 'Admin panel',
-        command: () => root.value = adminPanel(),
-      },
-    ],
+    label: 'Reset',
+    icon: 'i-material-symbols-refresh',
+    command: () => root.value = BlockClass.resetRoot(),
   },
   {
     label: 'HTML to clipboard',
