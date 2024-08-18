@@ -12,6 +12,7 @@ Made with :
 - [Unocss](https://unocss.io/)
 - [Primevue](https://www.primefaces.org/primevue/)
 - [VueUse](https://vueuse.org/)
+- [ULID](https://www.npmjs.com/package/ulid)
 - [Aldrich Font](https://fonts.google.com/specimen/Aldrich)
 - [Bruno Ace Font](https://fonts.google.com/specimen/Bruno+Ace)
 
