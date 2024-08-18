@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TreeSelectionKeys } from 'primevue/tree'
 import type { Block } from '~/objects/Block'
 
 const emit = defineEmits<{
@@ -8,26 +9,40 @@ const emit = defineEmits<{
 }>()
 
 const block = defineModel<Block>({ required: true })
+const selectedKey = inject('selectedKey') as Ref<TreeSelectionKeys | undefined>
 
 const dephtColor = computed(() => {
+  const classes: any = {}
+  if (selectedKey.value && selectedKey.value[block.value.id.toString()]) {
+    classes['blink-border'] = true
+  }
   switch (block.value.depth) {
     case 0:
-      return 'b-white'
+      classes['b-white'] = true
+      break
     case 1:
-      return 'b-green'
+      classes['b-green'] = true
+      break
     case 2:
-      return 'b-teal'
+      classes['b-teal'] = true
+      break
     case 3:
-      return 'b-sky'
+      classes['b-sky'] = true
+      break
     case 4:
-      return 'b-indigo'
+      classes['b-indigo'] = true
+      break
     case 5:
-      return 'b-purple'
+      classes['b-purple'] = true
+      break
     case 6:
-      return 'b-pink'
+      classes['b-pink'] = true
+      break
     default:
-      return 'b-gray'
+      classes['b-gray'] = true
+      break
   }
+  return classes
 })
 
 const style = reactive({
@@ -66,13 +81,13 @@ function edit() {
   editExtendedOptions.value = false
 }
 
-function remove(id: number) {
+function remove(id: string) {
   block.value.removeChild(id)
 }
 
 const items = [
   {
-    label: 'Create block',
+    label: 'Create child',
     icon: 'i-ph-plus-square',
     command: () => {
       block.value.addChild()
@@ -98,7 +113,7 @@ const items = [
     separator: true,
   },
   {
-    label: 'Create block in parent',
+    label: 'Create child in parent',
     icon: 'i-ph-plus-square',
     command: () => {
       emit('add')
@@ -127,10 +142,16 @@ const content = ref('')
     @contextmenu="onBlockRightClick"
   >
     <div
-      v-if="block.children.length === 0 && content === ''"
+      v-if="block.children.length === 0 && content === '' && block.depth === 0"
       class="text-muted h-full w-full flex items-center justify-center text-center"
     >
       <i class="i-ph-mouse-right-click-fill" /> to interact
+    </div>
+    <div
+      v-else-if="block.children.length === 0 && content === ''"
+      class="text-muted h-full w-full flex items-center justify-center text-center"
+    >
+      {{ block.name }}
     </div>
     <div v-else>
       {{ content }}
@@ -384,5 +405,14 @@ const content = ref('')
 </template>
 
 <style scoped>
+.blink-border {
+  animation: blink 1s;
+  animation-iteration-count: infinite;
+}
 
+@keyframes blink {
+  50% {
+    border-style: solid;
+  }
+}
 </style>

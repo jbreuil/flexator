@@ -17,6 +17,9 @@ importers:
       primevue:
         specifier: ^4.0.4
         version: 4.0.4(vue@3.4.37(typescript@5.5.4))
+      ulid:
+        specifier: ^2.3.0
+        version: 2.3.0
       vue:
         specifier: latest
         version: 3.4.37(typescript@5.5.4)
@@ -4116,6 +4119,10 @@ packages:
 
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
+
+  ulid@2.3.0:
+    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
+    hasBin: true
 
   ultrahtml@1.5.3:
     resolution: {integrity: sha512-GykOvZwgDWZlTQMtp5jrD4BVL+gNn2NVlVafjcFUJ7taY20tqYdwdoWBFy6GBJsNTZe1GkGPkSl5knQAjtgceg==}
@@ -9131,6 +9138,8 @@ snapshots:
   typescript@5.5.4: {}
 
   ufo@1.5.4: {}
+
+  ulid@2.3.0: {}
 
   ultrahtml@1.5.3: {}
 

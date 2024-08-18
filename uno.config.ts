@@ -30,6 +30,7 @@ for (const key in unoColors) {
 export default defineConfig({
   rules: [
     ['text-muted', { color: 'var(--p-text-muted-color)' }],
+    ['bg-surface-9', { 'background-color': 'var(--p-surface-900)' }],
   ],
   shortcuts: {
     // 'custom-shortcut': 'text-lg text-orange hover:text-teal',

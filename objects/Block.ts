@@ -1,8 +1,10 @@
+import type { TreeNode } from 'primevue/treenode'
+import { ulid } from 'ulid'
 import type { FlexAlignContent, FlexAlignItems, FlexAlignSelf, FlexBasisUnit, FlexColumnGapUnit, FlexDirection, FlexJustifyContent, FlexRowGapUnit, FlexWrap, HeightUnit, WidthUnit } from '~/types/BlockProperties'
 
 export class Block {
   // Properties
-  public id: number
+  public id: string
   public depth: number
   public name: string
 
@@ -32,10 +34,9 @@ export class Block {
 
   // Constructor
   public constructor(depth: number) {
-    const { getId } = useSequence()
-    this.id = getId()
+    this.id = ulid()
     this.depth = depth
-    this.name = `Block ${this.id}`
+    this.name = `Block ${this.id.substring(20, 26)}`
 
     this.children = []
 
@@ -67,8 +68,25 @@ export class Block {
     this.children.push(new Block(this.depth + 1))
   }
 
-  public removeChild(id: number): void {
+  public removeChild(id: string): void {
     this.children = this.children.filter(child => child.id !== id)
+  }
+
+  public getBlockById(id: string): Block | null {
+    if (this.id === id) {
+      return this
+    }
+    for (const child of this.children) {
+      const block = child.getBlockById(id)
+      if (block) {
+        return block
+      }
+    }
+    return null
+  }
+
+  public setName(name: string): void {
+    this.name = name
   }
 
   public getHTML(): string {
@@ -96,6 +114,17 @@ export class Block {
         ${this.children.map(child => child.getHTML()).join('')}
       </div>
     `
+  }
+
+  public getNode(): TreeNode {
+    const node = {
+      key: this.id.toString(),
+      label: this.name,
+      children: this.children.length === 0
+        ? []
+        : this.children.map(child => child.getNode()),
+    }
+    return node
   }
 
   public static reviver(key: string, value: any) {

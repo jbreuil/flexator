@@ -11,6 +11,7 @@ Made with :
 - [Nuxt 3](https://nuxtjs.org/)
 - [Unocss](https://unocss.io/)
 - [Primevue](https://www.primefaces.org/primevue/)
+- [VueUse](https://vueuse.org/)
 - [Aldrich Font](https://fonts.google.com/specimen/Aldrich)
 - [Bruno Ace Font](https://fonts.google.com/specimen/Bruno+Ace)
 
